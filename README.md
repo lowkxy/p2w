@@ -36,7 +36,7 @@ Account5
 
 ### Does this work on all modes?
 
-Yes, just change the mode in the config.json file, no shortforms. To test if your input would work try '/server <your input>' on pika before entering it to avoid confusion.
+Yes, just change the mode in the config.json file, no shortforms. To test if your input would work try '/server your_input' on pika before entering it to avoid confusion.
 
 ### Where is the usernames text file & config json?
 
