@@ -9,7 +9,7 @@ Collects gkits for you and gifts them to your main account. Saves a ton of time 
 
 ## Installation
 
-- Download [nodejs](https://nodejs.org/en/download) on your computer.
+- Install [nodejs](https://nodejs.org/en/download) on your computer.
 - Open a command prompt in your [folder's directory](https://www.youtube.com/watch?v=bgSSJQolR0E).
 - Install dependencies.
 ```bash
