@@ -20,6 +20,7 @@ class Bot {
         this.host = hostArray[randomInt(0, hostArray.length - 1)]
         this.version = version
         this.hasCollected = false
+        this.finished = false
 
         this.initBot()
     }
@@ -69,12 +70,19 @@ class Bot {
                 let gkit = window.containerItems().find((i) => {
                     return i.customLore?.some(str => str.toLowerCase().includes('can claim'))
                 })
-                if (!gkit && !this.hasCollected) {
-                    printMsg('INFO', this.bot.username, 'This account has no gkits available, disconnecting.')
-                    this.bot.quit()
-                } else if (!gkit) {
-                    this.bot.closeWindow(window)
-                    this.bot.chat(`/gift ${config.VARIABLES.main_acc}`)
+                if (!gkit) {
+                    if (!this.hasCollected) printMsg('INFO', this.bot.username, 'This account has no gkits available, checking if there\'s any in inventory.')
+                    let check = window.items().some((j) => {
+                        return j.customName && (j.customName.replace(clrRegex, '').toUpperCase().includes('GKIT CONTAINER') || j.customName.toUpperCase().replace(clrRegex, '').includes('CLASS CONTAINER'))
+                    })                     
+                    if (!check) {
+                        printMsg('ERROR', this.bot.username, 'No GKITs. Disconnecting.')
+                        this.bot.quit()
+                    } else {
+                        this.finished = true
+                        this.bot.closeWindow(window)
+                        this.bot.chat(`/gift ${config.VARIABLES.main_acc}`)
+                    }
                 } else {
                     this.hasCollected = true
                     this.bot.clickWindow(gkit.slot, 0, 0)
@@ -114,7 +122,7 @@ class Bot {
         })
 
         this.bot.on('windowClose', async (window) => {
-            if (window.title?.toUpperCase().includes('CLASSES')) {
+            if (window.title?.toUpperCase().includes('CLASSES') && !this.finished) {
                 w++
                 if (w % 7 == 0) await new Promise(r => setTimeout(r, 2000)) // Avoids "disconnect.spam" kick.
                 this.bot.chat('/gkit')
@@ -131,7 +139,7 @@ class Bot {
             printMsg('ERROR', this.bot.username, 'Disconnected. Reconnecting.\n')
             setTimeout(() => {
                 this.initBot()
-            }, 3000);
+            }, 3000)
         })
 
         this.bot.on('kicked', (reason) => {
@@ -140,6 +148,7 @@ class Bot {
         })
 
         this.bot.on('error', (err) => {
+            bot_amount--
             if (err.code === 'ECONNREFUSED') {
                 printMsg('ERROR', this.username, 'Login Denied.')
             } else {
@@ -165,4 +174,4 @@ const gkitInterval = setInterval(() => {
 
     new Bot(user, default_pw)
     bot_amount++
-}, config.VARIABLES.delay * 1000);
+}, config.VARIABLES.delay * 1000)
