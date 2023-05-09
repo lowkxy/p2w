@@ -19,7 +19,7 @@ class Bot {
         this.password = password
         this.host = hostArray[randomInt(0, hostArray.length - 1)]
         this.version = version
-        this.hasCollected = true
+        this.hasCollected = false
         this.finished = false
 
         this.initBot()
@@ -70,13 +70,19 @@ class Bot {
                 let gkit = window.containerItems().find((i) => {
                     return i.customLore?.some(str => str.toLowerCase().includes('can claim'))
                 })
-                if (!gkit && !this.hasCollected) {
-                    printMsg('INFO', this.bot.username, 'This account has no gkits available, disconnecting.')
-                    this.bot.quit()
-                } else if (!gkit) {
-                    this.finished = true
-                    this.bot.closeWindow(window)
-                    this.bot.chat(`/gift ${config.VARIABLES.main_acc}`)
+                if (!gkit) {
+                    if (!this.hasCollected) printMsg('INFO', this.bot.username, 'This account has no gkits available, checking if there\'s any in inventory.')
+                    let check = window.items().some((j) => {
+                        return j.customName && (j.customName.replace(clrRegex, '').toUpperCase().includes('GKIT CONTAINER') || j.customName.toUpperCase().replace(clrRegex, '').includes('CLASS CONTAINER'))
+                    })                     
+                    if (!check) {
+                        printMsg('ERROR', this.bot.username, 'No GKITs. Disconnecting.')
+                        this.bot.quit()
+                    } else {
+                        this.finished = true
+                        this.bot.closeWindow(window)
+                        this.bot.chat(`/gift ${config.VARIABLES.main_acc}`)
+                    }
                 } else {
                     this.hasCollected = true
                     this.bot.clickWindow(gkit.slot, 0, 0)
@@ -95,7 +101,6 @@ class Bot {
                     printMsg('ERROR', this.bot.username, 'No gkits in inventory. Disconnecting. (High chance inventory was full and gkits collected are in gift)')
                     this.bot.quit()
                 } else {
-                    console.log()
                     let temp_value = gkitArr.length
                     printMsg('INFO', this.bot.username, `There\'s ${gkitArr.length} GKITs in your inventory, gifting!`)
                     for (let i = 1; i <= temp_value; i++) {
@@ -134,7 +139,7 @@ class Bot {
             printMsg('ERROR', this.bot.username, 'Disconnected. Reconnecting.\n')
             setTimeout(() => {
                 this.initBot()
-            }, 3000);
+            }, 3000)
         })
 
         this.bot.on('kicked', (reason) => {
@@ -143,6 +148,7 @@ class Bot {
         })
 
         this.bot.on('error', (err) => {
+            bot_amount--
             if (err.code === 'ECONNREFUSED') {
                 printMsg('ERROR', this.username, 'Login Denied.')
             } else {
@@ -168,4 +174,4 @@ const gkitInterval = setInterval(() => {
 
     new Bot(user, default_pw)
     bot_amount++
-}, config.VARIABLES.delay * 1000);
+}, config.VARIABLES.delay * 1000)
