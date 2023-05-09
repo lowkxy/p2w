@@ -5,8 +5,6 @@
 
 <p align="center">Most efficient way to collect your gkits!</p>
 
-Collects gkits for you and gifts them to your main account. Saves a ton of time on all modes across pika-network.
-
 ## Installation
 
 - Install [nodejs](https://nodejs.org/en/download) on your computer.
