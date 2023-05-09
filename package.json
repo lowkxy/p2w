@@ -1,0 +1,16 @@
+{
+  "name": "pika-gkits",
+  "version": "1.0.1",
+  "description": "Collects gkits and gifts them to your main account using mineflayer.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "-elchapo#1337",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "mineflayer": "^4.8.1",
+    "prompt-sync": "^4.2.0"
+  }
+}
