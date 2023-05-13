@@ -163,7 +163,7 @@ const gkitInterval = setInterval(() => {
     if (bot_amount >= 4) return
     if (userArr.length == 0) return clearInterval(gkitInterval)
 
-    let user = userArr.shift()
+    let user = userArr.shift().trim()
     let default_pw = config.VARIABLES.password
 
     if (user.includes(':')) {
