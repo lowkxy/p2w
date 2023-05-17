@@ -7,6 +7,7 @@ let userArr = usernamesCheck()
 
 const config = require('../config.json')
 const hostArray = ['top.pika.host', 'proxy001.pikasys.net', 'proxy002.pikasys.net'] // Add more if needed, since pika has "already connected to proxy" issues.
+const opfOnly = ['CRATE KEY', 'TREASURE', 'SPECIAL']
 
 let bot_amount = 0
 let clrRegex = /\u00A7[0-9A-FK-OR]/ig
@@ -73,8 +74,7 @@ class Bot {
                 if (!gkit) {
                     if (!this.hasCollected) printMsg('INFO', this.bot.username, 'This account has no gkits available, checking if there\'s any in inventory.')
                     let check = window.items().some((j) => {
-                        console.log(j.customName)
-                        return j.customName && (j.customName.replace(clrRegex, '').toUpperCase().includes('GKIT CONTAINER') || j.customName.toUpperCase().replace(clrRegex, '').includes('CLASS CONTAINER'))
+                        return j.customName && (j.customName.replace(clrRegex, '').toUpperCase().includes('GKIT CONTAINER') || j.customName.toUpperCase().replace(clrRegex, '').includes('CLASS CONTAINER') || opfOnly.some(item => j.customName.toUpperCase().includes(item)))
                     })                     
                     if (!check) {
                         printMsg('ERROR', this.bot.username, 'No GKITs. Disconnecting.')
@@ -93,7 +93,7 @@ class Bot {
                 let gkitArr = []
                 
                 window.items().forEach((j) => {
-                    if (j.customName && (j.customName.replace(clrRegex, '').toUpperCase().includes('GKIT CONTAINER') || j.customName.toUpperCase().replace(clrRegex, '').includes('CLASS CONTAINER'))) {
+                    if (j.customName && (j.customName.replace(clrRegex, '').toUpperCase().includes('GKIT CONTAINER') || j.customName.toUpperCase().replace(clrRegex, '').includes('CLASS CONTAINER') || opfOnly.some(item => j.customName.toUpperCase().includes(item)))) {
                         gkitArr.push(j.slot)
                     }
                 })
