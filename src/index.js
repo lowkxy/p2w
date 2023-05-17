@@ -68,11 +68,12 @@ class Bot {
         this.bot.on('windowOpen', (window) => {
             if (window.title?.toUpperCase().includes('CLASSES')) {
                 let gkit = window.containerItems().find((i) => {
-                    return i.customLore?.some(str => str.toLowerCase().includes('can claim'))
+                    return i.customLore?.some(str => str.toLowerCase().includes('can claim') || str.toLowerCase().includes('to redeem'))
                 })
                 if (!gkit) {
                     if (!this.hasCollected) printMsg('INFO', this.bot.username, 'This account has no gkits available, checking if there\'s any in inventory.')
                     let check = window.items().some((j) => {
+                        console.log(j.customName)
                         return j.customName && (j.customName.replace(clrRegex, '').toUpperCase().includes('GKIT CONTAINER') || j.customName.toUpperCase().replace(clrRegex, '').includes('CLASS CONTAINER'))
                     })                     
                     if (!check) {
