@@ -2,7 +2,7 @@
 const { configCheck, firstRun, usernamesCheck } = require('./exports');
 
 let userArr = [];
-let kitInterval = null;
+let gkitInterval = null;
 
 (async () => {
     firstRun()
@@ -13,9 +13,9 @@ let kitInterval = null;
     // @ts-ignore
     const config = require('../config.json')
 
-    kitInterval = setInterval(() => {
+    gkitInterval = setInterval(() => {
         if (global.bot_amount >= 4) return // This can also be removed now since there's no more account limit. Requires stable/fast wifi.
-        if (userArr.length == 0) return clearInterval(kitInterval)
+        if (userArr.length == 0) return clearInterval(gkitInterval)
     
         let user = userArr.shift().trim()
         let default_pw = config.VARIABLES.password
