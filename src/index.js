@@ -1,7 +1,7 @@
 // @ts-check
-const { configCheck, firstRun, usernamesCheck } = require('./exports');
+const { configCheck, firstRun, usernamesCheck, printMsg } = require('./exports')
 
-let userArr = [];
+let userArr = []
 let gkitInterval = null;
 
 (async () => {
@@ -13,20 +13,19 @@ let gkitInterval = null;
     // @ts-ignore
     const config = require('../config.json')
 
+    if (userArr.length === 0) return printMsg('INFO', null, 'Add accounts before running the script.')
+
     gkitInterval = setInterval(() => {
-        if (global.bot_amount >= 4) return // This can also be removed now since there's no more account limit. Requires stable/fast wifi.
-        if (userArr.length == 0) return clearInterval(gkitInterval)
+        // if (global.bot_count >= 5) return // Only use this if you have slow wifi and limit to 2-6 depending on it's speed.
+
+        if (userArr.length === 0) return clearInterval(gkitInterval)
     
-        let user = userArr.shift().trim()
+        let user = userArr.pop().trim()
         let default_pw = config.VARIABLES.password
     
-        if (user.includes(':')) {
-            let split_user = user.split(/:/)
-            user = split_user[0]
-            default_pw = split_user[1]
-        }
-    
+        if (/:/.test(user)) [user, default_pw] = user.split(/:/)
+
         new Bot(user, default_pw)
-        global.bot_amount++
+        global.bot_count++
     }, config.VARIABLES.delay * 1000)
 })();

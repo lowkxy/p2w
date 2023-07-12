@@ -8,8 +8,8 @@ const path = require('path')
 /**
  * Print a well formatted message to console, main purpose to avoid repetitive code.
  * @param {'SUCCESS' | 'INFO' | 'ERROR'} type - The type of message to print.
- * @param {String | null} user - The bot's username or null.
- * @param {String} msg - Message to be printed.
+ * @param {string | null} user - The bot's username or null.
+ * @param {string} msg - Message to be printed.
  */
 function printMsg(type, user, msg) {
     const symbols = { SUCCESS: '✔︎', ERROR: '✖︎', INFO: 'ℹ︎' }
@@ -19,8 +19,8 @@ function printMsg(type, user, msg) {
 
 /**
  * Function that generates a random integer between the parameters provided.
- * @param {Number} min Minimum value.
- * @param {Number} max Maximum value.
+ * @param {number} min Minimum value.
+ * @param {number} max Maximum value.
  * @returns Random integer.
  */
 function randomInt(min, max) {
@@ -29,7 +29,7 @@ function randomInt(min, max) {
 
 /**
  * Logs an event to a text file, with further details.
- * @param {String} msg Message to log.
+ * @param {string} msg Message to log.
  */
 function logEvent(msg) {
     fs.appendFileSync('../log.txt', `[${timeNow()}] ${msg}\n`)
@@ -49,7 +49,7 @@ function timeNow() {
 function configCheck() {
     if (fs.existsSync('../config.json')) return printMsg('INFO', null, 'Config file found.')
 
-    const default_config = {
+    let default_config = {
         "VARIABLES": {
             "main_acc": "",
             "password": "",
@@ -57,7 +57,7 @@ function configCheck() {
             "delay": 3
         },
         "MC_INFO": {
-            "version": "1.9"
+            "version": "1.12"
         }
     }
 
@@ -107,4 +107,14 @@ function usernamesCheck() {
     }
 }
 
-module.exports = { printMsg, randomInt, logEvent, configCheck, firstRun, usernamesCheck }
+/**
+ * Removes unwanted color characters (§) using regex.
+ * @param {string} text String to be formatted.
+ * @returns Formatted string.
+ */
+function stripFormatting(text) {
+    const _r = /\u00A7[\dA-Z]/ig
+    return text.replace(_r, '')
+}
+
+module.exports = { printMsg, randomInt, logEvent, configCheck, firstRun, usernamesCheck, stripFormatting }
